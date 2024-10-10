@@ -8,9 +8,27 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 
-function updateTooltip(price) {
-  const tooltipText = `Scroll Gas Price: ${price.toFixed(4)} Gwei`;
-  chrome.action.setTitle({ title: tooltipText });
+function updateBadge(price) {
+  chrome.action.setBadgeText({text: price.toFixed(0)});
+  chrome.action.setBadgeBackgroundColor({color: '#4688F1'});
+}
+
+function checkAlerts(price) {
+  chrome.storage.local.get('settings', function(result) {
+    if (result.settings && result.settings.alertsEnabled) {
+      const threshold = result.settings.alertThreshold;
+      const condition = result.settings.alertCondition;
+      
+      if ((condition === 'above' && price > threshold) || (condition === 'below' && price < threshold)) {
+        chrome.notifications.create({
+          type: 'basic',
+          iconUrl: 'icon128.png',
+          title: 'Gas Price Alert',
+          message: `Gas price is ${price.toFixed(2)} Gwei (${condition} ${threshold} Gwei)`
+        });
+      }
+    }
+  });
 }
 
 function fetchGasPrice() {
@@ -26,23 +44,38 @@ function fetchGasPrice() {
       id: 1
     }),
   })
-  .then(response => response.json())
-  .then(data => {
-    if (data.error) {
-      throw new Error(`RPC error: ${data.error.message}`);
-    }
-    if (!data.result) {
-      throw new Error('No result in RPC response');
-    }
-    const baseFeeWei = BigInt(data.result);
-    const baseFeeGwei = Number(baseFeeWei) / 1e9; // Convert wei to Gwei
-    chrome.storage.local.set({ gasPrices: [{ price: baseFeeGwei }] });
-    updateTooltip(baseFeeGwei);
-  })
-  .catch(error => {
-    console.error('Error fetching gas price:', error);
-    chrome.action.setTitle({ title: 'Error fetching gas price' });
-  });
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) {
+        throw new Error(`RPC error: ${data.error.message}`);
+      }
+      if (!data.result) {
+        throw new Error('No result in RPC response');
+      }
+      const baseFeeWei = BigInt(data.result);
+      const baseFeeGwei = Number(baseFeeWei) / 1e9; // Convert wei to Gwei
+      
+      const lowPrice = baseFeeGwei * 0.9;
+      const highPrice = baseFeeGwei * 1.1;
+      
+      const gasPrices = {
+        baseFee: baseFeeGwei,
+        lowPrice: lowPrice,
+        avgPrice: baseFeeGwei,
+        highPrice: highPrice,
+        blockNumber: 'Latest', // You might want to fetch the actual block number
+        nextUpdate: Date.now() + 60000 // 1 minute from now
+      };
+      
+      chrome.storage.local.set({ gasPrices: gasPrices });
+      updateBadge(baseFeeGwei);
+      checkAlerts(baseFeeGwei);
+    })
+    .catch(error => {
+      console.error('Error fetching gas price:', error);
+      chrome.action.setBadgeText({text: 'ERR'});
+      chrome.action.setBadgeBackgroundColor({color: '#FF0000'});
+    });
 }
 
 // Initial fetch
