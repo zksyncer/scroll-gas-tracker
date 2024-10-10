@@ -1,43 +1,23 @@
-const SCROLL_RPC_URL = 'https://rpc.scroll.io';
-
-async function fetchGasPrice() {
-  try {
-    const response = await fetch(SCROLL_RPC_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        method: 'eth_gasPrice',
-        params: [],
-        id: 1
-      }),
+function updateIconBadge(price) {
+    chrome.action.setBadgeText({
+        text: price.toFixed(3)  // Display the price with 3 decimals on the badge
     });
-    const data = await response.json();
-    const gasPrice = parseInt(data.result, 16);
-    const gasPriceGwei = gasPrice / 1e9;
-    
-    const timestamp = new Date().toISOString();
-    const priceData = { timestamp, price: gasPriceGwei };
-    
-    // Save the gas price to Chrome's local storage
-    chrome.storage.local.get(['gasPrices'], function(result) {
-      let gasPrices = result.gasPrices || [];
-      gasPrices.push(priceData);
-      if (gasPrices.length > 24) {
-        gasPrices = gasPrices.slice(-24);
-      }
-      chrome.storage.local.set({ gasPrices });
-
-      // Set dynamic badge text with the latest price
-      chrome.action.setBadgeText({ text: gasPriceGwei.toFixed(1).toString() });
-    });
-  } catch (error) {
-    console.error('Error fetching gas price:', error);
-  }
+    chrome.action.setBadgeBackgroundColor({ color: '#000000' });  // Black background with white text
 }
 
-// Fetch gas price immediately and then at regular intervals
-fetchGasPrice();
-setInterval(fetchGasPrice, 10000); // Every 10 seconds
+// Continuously fetch gas price every 10 seconds
+function fetchGasPrice() {
+    fetch('https://rpc.scroll.io')  // Use the correct Scroll RPC URL
+        .then(response => response.json())
+        .then(data => {
+            const baseFee = parseFloat(data.result); // Assuming this contains the base fee
+            chrome.storage.local.set({ gasPrices: [{ price: baseFee }] });
+
+            // Update the badge with 3 decimal places
+            updateIconBadge(baseFee);
+        })
+        .catch(error => console.error('Error fetching gas price:', error));
+}
+
+// Set an interval to fetch gas price every 10 seconds
+setInterval(fetchGasPrice, 10000);
