@@ -1,26 +1,36 @@
 {
   "manifest_version": 3,
   "name": "Scroll Gas Price Tracker",
-  "description": "Track Scroll gas prices in real-time.",
-  "version": "1.1",
-  "icons": {
-    "16": "ICON16.png",
-    "48": "ICON48.png",
-    "128": "ICON128.png"
-  },
+  "version": "",
+  "description": "Tracks Scroll L2 gas prices in real time",
   "permissions": [
     "storage",
-    "alarms"
+    "alarms",
+    "offscreen"
   ],
-  "background": {
-    "service_worker": "background.js"
+  "host_permissions": [
+    "https://rpc.scroll.io/"
+  ],
+  "icons": {
+    "16": "ICON16.PNG",
+    "48": "ICON48.PNG",
+    "128": "ICON128.PNG"
   },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "ICON16.png",
-      "48": "ICON48.png",
-      "128": "ICON128.png"
+      "16": "ICON16.PNG",
+      "48": "ICON48.PNG",
+      "128": "ICON128.PNG"
     }
-  }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["info.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
