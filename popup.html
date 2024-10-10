@@ -1,54 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scroll Gas Tracker</title>
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        .gas-price {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid white;
-            border-radius: 5px;
-            font-size: 24px;
-        }
-        .base-fee {
-            background-color: #9b59b6; /* Purple */
-            color: white;
-        }
-        .recommended-fee {
-            background-color: #3498db; /* Blue */
-            color: white;
-        }
-        a {
-            color: white;
-            text-decoration: underline;
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="gas-price base-fee">
-        <span>Base Fee</span>
-        <span id="base-fee">Loading...</span>
-    </div>
-    <div class="gas-price recommended-fee">
-        <span>Recommended Base Fee</span>
-        <span id="recommended-fee">Loading...</span>
-    </div>
-    <a href="https://scrollscan.com" target="_blank">New changes: learn about EIP-1559 & the changes to this extension.</a>
-    <script src="popup.js"></script>
-</body>
-</html>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #333; /* Dark background */
+      color: white; /* White text */
+      text-align: center;
+      padding: 20px;
+    }
+
+    .price-box {
+      display: inline-block;
+      padding: 20px;
+      margin: 10px;
+      border-radius: 10px;
+      background-color: #ff69b4; /* Default base fee color */
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    #recommended-box {
+      background-color: #1e90ff; /* Recommended base fee color */
+    }
+
+    #base-fee, #recommended-fee {
+      font-size: 28px;
+    }
+  </
