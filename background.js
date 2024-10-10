@@ -1,5 +1,6 @@
-const SCROLL_RPC_URL = 'https://rpc.scroll.io'; // updated RPC URL
+const SCROLL_RPC_URL = 'https://rpc.scroll.io';
 
+// Fetch gas price function
 async function fetchGasPrice() {
   try {
     const response = await fetch(SCROLL_RPC_URL, {
@@ -14,15 +15,15 @@ async function fetchGasPrice() {
         id: 1
       }),
     });
-    
+
     const data = await response.json();
-    const gasPrice = parseInt(data.result, 16);  // Convert hex to decimal
-    const gasPriceGwei = (gasPrice / 1e9).toFixed(2);  // Convert wei to gwei, limit to 2 decimal places
+    const gasPrice = parseInt(data.result, 16);
+    const gasPriceGwei = gasPrice / 1e9;
     
-    // Store the gas price in local storage
     const timestamp = new Date().toISOString();
     const priceData = { timestamp, price: gasPriceGwei };
     
+    // Store the gas price in Chrome storage
     chrome.storage.local.get(['gasPrices'], function(result) {
       let gasPrices = result.gasPrices || [];
       gasPrices.push(priceData);
@@ -32,20 +33,20 @@ async function fetchGasPrice() {
       chrome.storage.local.set({ gasPrices });
     });
 
-    // Update the badge text on the extension icon
-    chrome.action.setBadgeText({ text: gasPriceGwei });
-    chrome.action.setBadgeBackgroundColor({ color: '#0000FF' });  // Optional: Set badge color
-
   } catch (error) {
     console.error('Error fetching gas price:', error);
   }
 }
 
-// Create an alarm to fetch gas price every 5 minutes
+// Set up an alarm to fetch gas price every 5 minutes
 chrome.alarms.create('fetchGasPrice', { periodInMinutes: 5 });
 
-// Set up the listener to call fetchGasPrice whenever the alarm triggers
-chrome.alarms.onAlarm.addListener(fetchGasPrice);
+// Handle alarm trigger
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === 'fetchGasPrice') {
+    fetchGasPrice();
+  }
+});
 
-// Fetch gas price immediately when the extension is loaded
+// Fetch gas price immediately when service worker is registered
 fetchGasPrice();
