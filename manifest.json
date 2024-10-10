@@ -4,7 +4,17 @@
   "description": "Fetches the latest gas prices from Scroll network and stores them in local storage.",
   "version": "1.0",
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "ICON16.jpg",
+      "48": "ICON48.jpg",
+      "128": "ICON128.jpg"
+    }
+  },
+  "icons": {
+    "16": "ICON16.jpg",
+    "48": "ICON48.jpg",
+    "128": "ICON128.jpg"
   },
   "background": {
     "service_worker": "background.js"
@@ -17,4 +27,3 @@
     "https://rpc.scroll.io/*"
   ]
 }
-
