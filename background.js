@@ -47,7 +47,7 @@ async function fetchGasPrice() {
       standard: standardGwei,
       fast: fastGwei,
       rapid: rapidGwei,
-      blockNumber: 'Latest',
+      blockNumber: 'Latest', // We'll update this in fetchLatestBlockNumber
       nextUpdate: Date.now() + 60000 // 1 minute from now
     };
 
