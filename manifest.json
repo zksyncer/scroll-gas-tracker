@@ -6,7 +6,10 @@
   "permissions": [
     "storage",
     "alarms",
-    "webRequest"
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "https://rpc.scroll.io/"
   ],
   "icons": {
     "16": "icon16.png",
@@ -23,5 +26,12 @@
   },
   "background": {
     "service_worker": "background.js"
+  },
+  "declarative_net_request": {
+    "rule_resources": [{
+      "id": "ruleset_1",
+      "enabled": true,
+      "path": "rules.json"
+    }]
   }
 }
