@@ -24,6 +24,10 @@ chrome.alarms.create('fetchGasPrice', { periodInMinutes: 5 });
 chrome.alarms.onAlarm.addListener(fetchGasPrice);
 fetchGasPrice();
 
-chrome.alarms.create('fetchGasPrice', { periodInMinutes: 5 });
-chrome.alarms.onAlarm.addListener(fetchGasPrice);
-fetchGasPrice();
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if (request.action === "fetchGasPrice") {
+      fetchGasPrice();
+    }
+  }
+);
