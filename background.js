@@ -14,31 +14,17 @@ function updateTooltip(price) {
 }
 
 function fetchGasPrice() {
-  const request = {
+  fetch('https://rpc.scroll.io', {
     method: 'POST',
-    url: 'https://rpc.scroll.io',
-    data: JSON.stringify({
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
       jsonrpc: '2.0',
       method: 'eth_gasPrice',
       params: [],
       id: 1
-    })
-  };
-
-  chrome.webRequest.onBeforeRequest.addListener(
-    (details) => {
-      return { cancel: true };
-    },
-    { urls: ['https://rpc.scroll.io/*'] },
-    ['blocking']
-  );
-
-  fetch(request.url, {
-    method: request.method,
-    body: request.data,
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    }),
   })
   .then(response => response.json())
   .then(data => {
@@ -56,9 +42,6 @@ function fetchGasPrice() {
   .catch(error => {
     console.error('Error fetching gas price:', error);
     chrome.action.setTitle({ title: 'Error fetching gas price' });
-  })
-  .finally(() => {
-    chrome.webRequest.onBeforeRequest.removeListener(null);
   });
 }
 
