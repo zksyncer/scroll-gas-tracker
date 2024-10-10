@@ -10,17 +10,17 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 
 function updateIconBadge(price) {
   const badgeText = price.toFixed(4);  // Display the price with 4 decimals on the badge
-  chrome.action.setBadgeText({ text: badgeText });
+  chrome.action.setBadgeText({ text: '' });  // Clear the default badge text
   chrome.action.setBadgeBackgroundColor({ color: '#000000' });
   chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
   
-  // Set a smaller font size for the badge text
+  // Set a title for hover text
   chrome.action.setTitle({ title: `Scroll Gas Price: ${badgeText} Gwei` });
 
   // Create a canvas to draw the badge text with a smaller font
   const canvas = new OffscreenCanvas(19, 19);
   const ctx = canvas.getContext('2d');
-  ctx.font = '9px Arial';  // Adjust this value to make the font smaller
+  ctx.font = '6px Arial';  // Reduced font size (50% of original 12px)
   ctx.fillStyle = 'white';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
