@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Scroll Gas Price Fetcher",
-  "description": "Fetches the latest gas prices from Scroll network and stores them in local storage.",
+  "name": "Scroll Gas Price Tracker",
   "version": "1.0",
+  "description": "Track gas prices on the Scroll network",
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -11,18 +11,17 @@
       "128": "ICON128.PNG"
     }
   },
+  "permissions": [
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "icons": {
     "16": "ICON16.PNG",
     "48": "ICON48.PNG",
     "128": "ICON128.PNG"
   },
-  "background": {
-    "service_worker": "background.js"
-  },
-  "permissions": [
-    "alarms",
-    "storage"
-  ],
   "host_permissions": [
     "https://rpc.scroll.io/*"
   ]
