@@ -16,8 +16,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const gasPrices = result.gasPrices || [];
         if (gasPrices.length > 0) {
             const latestPrice = gasPrices[gasPrices.length - 1];
+            // Show gas price to 6 decimal places inside the popup
             document.getElementById('base-fee').textContent = latestPrice.price.toFixed(6);  // 6 decimal places
-            document.getElementById('recommended-fee').textContent = (latestPrice.price * 1.2).toFixed(6);  // Recommended fee
+            document.getElementById('recommended-fee').textContent = (latestPrice.price * 1.2).toFixed(6);  // Recommended fee with 6 decimals
             updateBackgroundColor(latestPrice.price);  // Dynamically update background color
         }
     });
