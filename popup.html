@@ -1,37 +1,41 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const baseFeeElement = document.getElementById('base-fee');
-  const learnMoreLink = document.getElementById('learn-more');
-  const infoPage = document.getElementById('info-page');
-  const backButton = document.getElementById('back-button');
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <div class="box base-fee">
+      <p>Base Fee</p>
+      <span id="base-fee">0.0000</span>
+    </div>
+  </div>
+  <div class="footer">
+    <p><a href="#" id="learn-more">Learn about Scroll L2 Gas Prices</a></p>
+  </div>
+  <div id="info-page" class="hidden">
+    <h2>Scroll's Bernoulli Upgrade</h2>
+    <p>Scheduled for April 29th, 2024, the Bernoulli upgrade aims to reduce transaction costs by 10x (depending on L1 gas prices). It introduces EIP-4844 data blobs for L1 data availability and the SHA2-256 precompile.</p>
 
-  function updateUI(baseFee) {
-    baseFeeElement.textContent = baseFee.toFixed(4);
-  }
+    <h3>Key Features:</h3>
+    <ul>
+      <li>EIP-4844 support: Utilizes "blobs" for data transmission, reducing gas costs for data availability.</li>
+      <li>SHA2-256 precompiled contract support: Enables more efficient cryptographic processing.</li>
+    </ul>
 
-  // Fetch and display the most recent price when the popup opens
-  chrome.storage.local.get(['gasPrices'], function(result) {
-    const gasPrices = result.gasPrices || [];
-    if (gasPrices.length > 0) {
-      updateUI(gasPrices[gasPrices.length - 1].price);
-    }
-  });
+    <h3>Technical Details:</h3>
+    <p>The upgrade includes changes to contracts, nodes, and ZKEVM circuits. Contracts will now accept batches with either calldata or blob encoding. Nodes (l2geth) will be updated to v5.3.0, and ZKEVM circuits to v0.10.3.</p>
 
-  // Listen for storage changes in real-time and update the UI
-  chrome.storage.onChanged.addListener(function(changes, area) {
-    if (area === 'local' && changes.gasPrices) {
-      const gasPrices = changes.gasPrices.newValue || [];
-      if (gasPrices.length > 0) {
-        updateUI(gasPrices[gasPrices.length - 1].price);
-      }
-    }
-  });
+    <h3>Timeline:</h3>
+    <ul>
+      <li>April 15th, 2024: Contract upgrade proposal initiated</li>
+      <li>April 22nd, 2024: New l2geth version release</li>
+      <li>April 29th, 2024: Contract upgrade execution on Scroll Mainnet</li>
+    </ul>
 
-  learnMoreLink.addEventListener('click', function(e) {
-    e.preventDefault();
-    infoPage.classList.remove('hidden');
-  });
-
-  backButton.addEventListener('click', function() {
-    infoPage.classList.add('hidden');
-  });
-});
+    <p>For more detailed information, please visit the official Scroll documentation.</p>
+    <button id="back-button">Back</button>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
