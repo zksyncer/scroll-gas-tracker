@@ -5,32 +5,20 @@
   "description": "Tracks Scroll L2 gas prices in real time",
   "permissions": [
     "storage",
-    "alarms",
-    "offscreen"
+    "alarms"
   ],
   "host_permissions": [
     "https://rpc.scroll.io/"
   ],
-  "icons": {
-    "16": "ICON16.PNG",
-    "48": "ICON48.PNG",
-    "128": "ICON128.PNG"
-  },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "ICON16.PNG",
-      "48": "ICON48.PNG",
-      "128": "ICON128.PNG"
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
     }
   },
   "background": {
     "service_worker": "background.js"
-  },
-  "web_accessible_resources": [
-    {
-      "resources": ["info.html"],
-      "matches": ["<all_urls>"]
-    }
-  ]
+  }
 }
