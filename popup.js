@@ -1,10 +1,13 @@
-document.addEventListener('DOMContentLoaded', function() {
-  chrome.storage.local.get(['gasPrices'], function(result) {
-    const gasPrices = result.gasPrices || [];
-    if (gasPrices.length > 0) {
-      const currentPrice = gasPrices[gasPrices.length - 1].price;
-      document.getElementById('currentPrice').textContent = 
-        `Current: ${currentPrice.toFixed(2)} Gwei`;
+function updateGasPrice() {
+  chrome.storage.local.get(['gasPrice'], function(result) {
+    const gasPrice = result.gasPrice;
+    if (gasPrice) {
+      document.getElementById('gasPrice').textContent = `${gasPrice.toFixed(2)} Gwei`;
+    } else {
+      document.getElementById('gasPrice').textContent = 'Not available';
     }
   });
-});
+}
+
+updateGasPrice();
+setInterval(updateGasPrice, 5000);
