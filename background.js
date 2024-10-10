@@ -1,14 +1,17 @@
 chrome.runtime.onInstalled.addListener(() => {
+  console.log('Extension installed. Setting up alarm.');
   chrome.alarms.create('fetchGasPrice', { periodInMinutes: 1/6 });
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
+  console.log('Alarm triggered:', alarm.name);
   if (alarm.name === 'fetchGasPrice') {
     fetchGasPrice();
   }
 });
 
 function updateIconBadge(price) {
+  console.log('Updating icon badge with price:', price);
   const badgeText = price.toFixed(2);  // Display the price with 2 decimals
   chrome.action.setBadgeText({ text: badgeText });
   chrome.action.setBadgeBackgroundColor({ color: '#000000' });  // Black background
@@ -32,10 +35,17 @@ function updateIconBadge(price) {
   const imageData = ctx.getImageData(0, 0, 19, 19);
 
   // Set the badge icon with the custom-drawn text
-  chrome.action.setIcon({ imageData: imageData });
+  chrome.action.setIcon({ imageData: imageData }, () => {
+    if (chrome.runtime.lastError) {
+      console.error('Error setting icon:', chrome.runtime.lastError);
+    } else {
+      console.log('Icon set successfully');
+    }
+  });
 }
 
 function fetchGasPrice() {
+  console.log('Fetching gas price...');
   fetch('https://rpc.scroll.io', {
     method: 'POST',
     headers: {
@@ -50,6 +60,7 @@ function fetchGasPrice() {
   })
     .then(response => response.json())
     .then(data => {
+      console.log('Received data:', data);
       if (data.error) {
         throw new Error(`RPC error: ${data.error.message}`);
       }
@@ -58,7 +69,10 @@ function fetchGasPrice() {
       }
       const baseFeeWei = BigInt(data.result);
       const baseFeeGwei = Number(baseFeeWei) / 1e9; // Convert wei to Gwei
-      chrome.storage.local.set({ gasPrices: [{ price: baseFeeGwei }] });
+      console.log('Calculated gas price:', baseFeeGwei, 'Gwei');
+      chrome.storage.local.set({ gasPrices: [{ price: baseFeeGwei }] }, () => {
+        console.log('Gas price stored in local storage');
+      });
       updateIconBadge(baseFeeGwei);
     })
     .catch(error => {
@@ -69,4 +83,19 @@ function fetchGasPrice() {
 }
 
 // Initial fetch
+console.log('Performing initial gas price fetch');
 fetchGasPrice();
+
+// Listen for messages from popup
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log('Received message:', request);
+  if (request.action === "fetchGasPrice") {
+    console.log('Manual fetch requested from popup');
+    fetchGasPrice();
+    sendResponse({status: "Fetching gas price"});
+  }
+  return true; // Indicates that the response will be sent asynchronously
+});
+
+// For debugging: log when the background script is loaded
+console.log('Background script loaded');
