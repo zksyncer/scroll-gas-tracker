@@ -1,13 +1,16 @@
-function updateGasPrice() {
-  chrome.storage.local.get(['gasPrice'], function(result) {
-    const gasPrice = result.gasPrice;
-    if (gasPrice) {
-      document.getElementById('gasPrice').textContent = `${gasPrice.toFixed(2)} Gwei`;
-    } else {
-      document.getElementById('gasPrice').textContent = 'Not available';
-    }
-  });
-}
+document.addEventListener('DOMContentLoaded', function() {
+  chrome.storage.local.get(['gasPrices'], function(result) {
+    const gasPrices = result.gasPrices || [];
+    const priceList = document.getElementById('price-list');
 
-updateGasPrice();
-setInterval(updateGasPrice, 5000);
+    // Clear the list
+    priceList.innerHTML = '';
+
+    // Add each gas price entry to the list
+    gasPrices.forEach(priceData => {
+      const listItem = document.createElement('li');
+      listItem.textContent = `${priceData.timestamp}: ${priceData.price} Gwei`;
+      priceList.appendChild(listItem);
+    });
+  });
+});
