@@ -3,8 +3,8 @@ body {
   margin: 0;
   padding: 10px;
   font-family: Arial, sans-serif;
-  background-color: #4285f4;
-  color: white;
+  background-color: #F8E5D8;
+  color: #333;
 }
 
 .container {
@@ -12,9 +12,10 @@ body {
 }
 
 .box {
-  background-color: #d18eff;
+  background-color: #E8C79E;
   padding: 20px;
   border-radius: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .box p {
@@ -27,6 +28,7 @@ body {
   display: block;
   font-size: 36px;
   margin-top: 10px;
+  color: #333;
 }
 
 .footer {
@@ -36,13 +38,13 @@ body {
 }
 
 .footer a {
-  color: white;
+  color: #333;
   text-decoration: underline;
 }
 
 #info-page {
   background-color: white;
-  color: black;
+  color: #333;
   padding: 20px;
   position: absolute;
   top: 0;
@@ -59,9 +61,13 @@ body {
 #back-button {
   margin-top: 10px;
   padding: 5px 10px;
-  background-color: #4285f4;
-  color: white;
+  background-color: #E8C79E;
+  color: #333;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+#back-button:hover {
+  background-color: #F8E5D8;
 }
