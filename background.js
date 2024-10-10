@@ -1,5 +1,4 @@
 chrome.runtime.onInstalled.addListener(() => {
-  // Set up alarm to fetch gas price every 10 seconds
   chrome.alarms.create('fetchGasPrice', { periodInMinutes: 1/6 });
 });
 
@@ -10,10 +9,13 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 });
 
 function updateIconBadge(price) {
-  chrome.action.setBadgeText({
-    text: price.toFixed(2)  // Display the price with 2 decimals on the badge
-  });
+  const badgeText = price.toFixed(1);  // Display the price with 1 decimal on the badge
+  chrome.action.setBadgeText({ text: badgeText });
   chrome.action.setBadgeBackgroundColor({ color: '#000000' });
+  
+  // Set a smaller font size for the badge text
+  chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+  chrome.action.setBadgeFont({ size: 9 });  // Adjust this value as needed
 }
 
 function fetchGasPrice() {
