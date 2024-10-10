@@ -5,8 +5,7 @@
   "description": "Tracks Scroll L2 gas prices in real time",
   "permissions": [
     "storage",
-    "alarms",
-    "offscreen"
+    "alarms"
   ],
   "host_permissions": [
     "https://rpc.scroll.io/"
