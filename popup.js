@@ -1,16 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
   chrome.storage.local.get(['gasPrices'], function(result) {
     const gasPrices = result.gasPrices || [];
-    const priceList = document.getElementById('price-list');
-
-    // Clear the list
-    priceList.innerHTML = '';
-
-    // Add each gas price entry to the list
-    gasPrices.forEach(priceData => {
-      const listItem = document.createElement('li');
-      listItem.textContent = `${priceData.timestamp}: ${priceData.price} Gwei`;
-      priceList.appendChild(listItem);
-    });
+    const gasPriceDisplay = document.getElementById('gasPriceDisplay');
+    
+    if (gasPrices.length === 0) {
+      gasPriceDisplay.textContent = 'No gas price data available.';
+    } else {
+      const latestPrice = gasPrices[gasPrices.length - 1];
+      gasPriceDisplay.textContent = `Latest Gas Price: ${latestPrice.price} Gwei\nFetched at: ${new Date(latestPrice.timestamp).toLocaleTimeString()}`;
+    }
   });
 });
