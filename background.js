@@ -9,10 +9,13 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 });
 
 function updateIconBadge(price) {
-  const badgeText = price.toFixed(1);  // Display the price with 1 decimal on the badge
+  const badgeText = price.toFixed(4);  // Display the price with 4 decimals on the badge
   chrome.action.setBadgeText({ text: badgeText });
   chrome.action.setBadgeBackgroundColor({ color: '#000000' });
   chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+  
+  // Set a smaller font size for the badge text
+  chrome.action.setTitle({ title: `Scroll Gas Price: ${badgeText} Gwei` });
 }
 
 function fetchGasPrice() {
@@ -36,11 +39,8 @@ function fetchGasPrice() {
       if (!data.result) {
         throw new Error('No result in RPC response');
       }
-      const baseFeeWei = parseInt(data.result, 16);
-      if (isNaN(baseFeeWei)) {
-        throw new Error('Invalid gas price returned');
-      }
-      const baseFeeGwei = baseFeeWei / 1e9; // Convert wei to Gwei
+      const baseFeeWei = BigInt(data.result);
+      const baseFeeGwei = Number(baseFeeWei) / 1e9; // Convert wei to Gwei
       chrome.storage.local.set({ gasPrices: [{ price: baseFeeGwei }] });
       updateIconBadge(baseFeeGwei);
     })
