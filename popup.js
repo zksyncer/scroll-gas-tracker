@@ -1,14 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
   const baseFeeElement = document.getElementById('base-fee');
   const learnMoreLink = document.getElementById('learn-more');
-  const infoPage = document.getElementById('info-page');
-  const backButton = document.getElementById('back-button');
 
   function updateUI(baseFee) {
     baseFeeElement.textContent = baseFee.toFixed(4);
   }
 
-  // Fetch and display the most recent price when the popup opens
   chrome.storage.local.get(['gasPrices'], function(result) {
     const gasPrices = result.gasPrices || [];
     if (gasPrices.length > 0) {
@@ -16,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Listen for storage changes in real-time and update the UI
   chrome.storage.onChanged.addListener(function(changes, area) {
     if (area === 'local' && changes.gasPrices) {
       const gasPrices = changes.gasPrices.newValue || [];
@@ -28,10 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   learnMoreLink.addEventListener('click', function(e) {
     e.preventDefault();
-    infoPage.classList.remove('hidden');
-  });
-
-  backButton.addEventListener('click', function() {
-    infoPage.classList.add('hidden');
+    chrome.tabs.create({url: 'info.html'});
   });
 });
