@@ -1,30 +1,20 @@
 body {
+  width: 300px;
   margin: 0;
-  padding: 0;
+  padding: 10px;
   font-family: Arial, sans-serif;
   background-color: #4285f4;
-}
-
-.container {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-}
-
-.box {
-  width: 48%;
-  text-align: center;
-  padding: 20px;
-  border-radius: 15px;
   color: white;
 }
 
-.base-fee {
-  background-color: #d18eff;
+.container {
+  text-align: center;
 }
 
-.recommended-fee {
-  background-color: #4d9bff;
+.box {
+  background-color: #d18eff;
+  padding: 20px;
+  border-radius: 15px;
 }
 
 .box p {
@@ -40,10 +30,9 @@ body {
 }
 
 .footer {
-  padding: 10px;
+  margin-top: 10px;
   text-align: center;
-  font-size: 12px;
-  color: white;
+  font-size: 14px;
 }
 
 .footer a {
@@ -51,6 +40,28 @@ body {
   text-decoration: underline;
 }
 
-.footer a:hover {
-  color: #ccc;
+#info-page {
+  background-color: white;
+  color: black;
+  padding: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+#back-button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
