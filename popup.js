@@ -11,12 +11,34 @@ document.addEventListener('DOMContentLoaded', function() {
   function updateUI(data) {
     baseFeeElement.textContent = data.baseFee.toFixed(4) + ' Gwei';
     blockNumberElement.textContent = data.blockNumber;
+    document.getElementById('block-number-info').textContent = data.blockNumber;
+    document.getElementById('base-fee-info').textContent = data.baseFee.toFixed(4) + ' Gwei';
     standardPriceElement.textContent = data.standard.toFixed(2) + ' Gwei';
     fastPriceElement.textContent = data.fast.toFixed(2) + ' Gwei';
     rapidPriceElement.textContent = data.rapid.toFixed(2) + ' Gwei';
     
+    updateEmoji('standard-emoji', data.standard);
+    updateEmoji('fast-emoji', data.fast);
+    updateEmoji('rapid-emoji', data.rapid);
+    
+    const lastUpdated = new Date();
+    document.getElementById('last-updated').textContent = lastUpdated.toLocaleTimeString();
+    
     const nextUpdate = new Date(data.nextUpdate);
     nextUpdateElement.textContent = nextUpdate.toLocaleTimeString();
+  }
+
+  function updateEmoji(elementId, price) {
+    const element = document.getElementById(elementId);
+    if (price < 0.05) {
+      element.textContent = '😊';
+    } else if (price < 0.1) {
+      element.textContent = '😐';
+    } else if (price < 0.2) {
+      element.textContent = '😟';
+    } else {
+      element.textContent = '😠';
+    }
   }
 
   function toggleTheme() {
@@ -26,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   toggleThemeBtn.addEventListener('click', toggleTheme);
   settingsBtn.addEventListener('click', () => {
-    // Implement settings functionality if needed
+    chrome.tabs.create({url: 'info.html'});
   });
 
   chrome.storage.local.get(['gasPrices', 'darkMode'], function(result) {
