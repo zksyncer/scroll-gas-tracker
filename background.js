@@ -12,10 +12,7 @@ function updateIconBadge(price) {
   const badgeText = price.toFixed(1);  // Display the price with 1 decimal on the badge
   chrome.action.setBadgeText({ text: badgeText });
   chrome.action.setBadgeBackgroundColor({ color: '#000000' });
-  
-  // Set a smaller font size for the badge text
   chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
-  chrome.action.setBadgeFont({ size: 9 });  // Adjust this value as needed
 }
 
 function fetchGasPrice() {
@@ -33,11 +30,25 @@ function fetchGasPrice() {
   })
     .then(response => response.json())
     .then(data => {
-      const baseFee = parseInt(data.result, 16) / 1e9; // Convert wei to Gwei
-      chrome.storage.local.set({ gasPrices: [{ price: baseFee }] });
-      updateIconBadge(baseFee);
+      if (data.error) {
+        throw new Error(`RPC error: ${data.error.message}`);
+      }
+      if (!data.result) {
+        throw new Error('No result in RPC response');
+      }
+      const baseFeeWei = parseInt(data.result, 16);
+      if (isNaN(baseFeeWei)) {
+        throw new Error('Invalid gas price returned');
+      }
+      const baseFeeGwei = baseFeeWei / 1e9; // Convert wei to Gwei
+      chrome.storage.local.set({ gasPrices: [{ price: baseFeeGwei }] });
+      updateIconBadge(baseFeeGwei);
     })
-    .catch(error => console.error('Error fetching gas price:', error));
+    .catch(error => {
+      console.error('Error fetching gas price:', error);
+      chrome.action.setBadgeText({ text: 'ERR' });
+      chrome.action.setBadgeBackgroundColor({ color: '#FF0000' });
+    });
 }
 
 // Initial fetch
