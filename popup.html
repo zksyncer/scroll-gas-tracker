@@ -1,49 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #333; /* Dark background */
-      color: white; /* White text */
-      text-align: center;
-      padding: 20px;
-    }
-
-    .price-box {
-      display: inline-block;
-      padding: 20px;
-      margin: 10px;
-      border-radius: 10px;
-      background-color: #ff69b4; /* Default base fee color */
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    #recommended-box {
-      background-color: #1e90ff; /* Recommended base fee color */
-    }
-
-    #base-fee, #recommended-fee {
-      font-size: 28px;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="popup.css">
 </head>
 <body>
-  <div id="base-box" class="price-box">
-    <p>Base Fee</p>
-    <p id="base-fee">0.000000</p> <!-- Default text with 6 decimals -->
+  <div class="container">
+    <div class="box base-fee">
+      <p>Base Fee</p>
+      <span id="base-fee">0.00</span>
+    </div>
+    <div class="box recommended-fee">
+      <p>Recommended Fee</p>
+      <span id="recommended-fee">0.00</span>
+    </div>
   </div>
-  <div id="recommended-box" class="price-box">
-    <p>Recommended Base Fee</p>
-    <p id="recommended-fee">0.000000</p> <!-- Default text with 6 decimals -->
+  <div class="footer">
+    <p>Learn about <a href="https://scroll.io/blog/newScrollRPCs" target="_blank">Scroll L2 Gas Prices</a></p>
   </div>
-  <p>New changes: learn about <a href="https://eips.ethereum.org/EIPS/eip-1559" target="_blank" style="color: #1e90ff;">EIP-1559 & the changes to this extension.</a></p>
+  <script src="popup.js"></script>
 </body>
 </html>
-
-    #base-fee, #recommended-fee {
-      font-size: 28px;
-    }
-  </
