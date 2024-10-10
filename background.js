@@ -20,7 +20,7 @@ function updateIconBadge(price) {
   // Create a canvas to draw the badge text with a smaller font
   const canvas = new OffscreenCanvas(19, 19);
   const ctx = canvas.getContext('2d');
-  ctx.font = '6px Arial';  // Reduced font size (50% of original 12px)
+  ctx.font = '7.5px Arial';  // Adjusted font size to match the image
   ctx.fillStyle = 'white';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
