@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const backButton = document.getElementById('back-button');
 
   function updateUI(baseFee) {
-    baseFeeElement.textContent = baseFee.toFixed(2);
+    baseFeeElement.textContent = baseFee.toFixed(4);
   }
 
   // Fetch and display the most recent price when the popup opens
@@ -28,12 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   learnMoreLink.addEventListener('click', function(e) {
     e.preventDefault();
-    fetch('info.html')
-      .then(response => response.text())
-      .then(html => {
-        infoPage.querySelector('div').innerHTML = html;
-        infoPage.classList.remove('hidden');
-      });
+    infoPage.classList.remove('hidden');
   });
 
   backButton.addEventListener('click', function() {
