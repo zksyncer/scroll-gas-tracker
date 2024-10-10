@@ -15,11 +15,23 @@ body.dark-mode {
   text-align: center;
 }
 
-.header {
+header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+}
+
+.buttons {
+  display: flex;
+}
+
+.buttons button {
+  margin-left: 5px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 .main-content {
@@ -46,6 +58,7 @@ body.dark-mode {
 .gas-prices {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .price-box {
@@ -56,12 +69,17 @@ body.dark-mode {
 }
 
 .price-box:nth-child(1) { background-color: #e6ffe6; }
-.price-box:nth-child(2) { background-color: #e6e6ff; }
+.price-box:nth-child(2) { background-color: #fff0e6; }
 .price-box:nth-child(3) { background-color: #ffe6e6; }
 
 .dark-mode .price-box:nth-child(1) { background-color: #003300; }
-.dark-mode .price-box:nth-child(2) { background-color: #000033; }
+.dark-mode .price-box:nth-child(2) { background-color: #331a00; }
 .dark-mode .price-box:nth-child(3) { background-color: #330000; }
+
+.pool-info {
+  text-align: left;
+  margin-bottom: 10px;
+}
 
 .footer {
   display: flex;
@@ -75,22 +93,4 @@ body.dark-mode {
 
 .dark-mode .footer a {
   color: #66b3ff;
-}
-
-#settings {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-}
-
-.hidden {
-  display: none !important;
 }
