@@ -5,13 +5,53 @@
 </head>
 <body>
   <div class="container">
-    <div class="box">
-      <p>Base Fee</p>
-      <span id="base-fee">0.0000</span>
+    <div class="header">
+      <h1>Scroll Gas Tracker</h1>
+      <button id="toggleTheme">🌓</button>
+      <button id="settingsBtn">⚙️</button>
+    </div>
+    <div class="main-content">
+      <div class="box">
+        <p>Base Fee</p>
+        <span id="base-fee">0.0000</span>
+      </div>
+      <div class="info">
+        <p>Block Number: <span id="block-number">-</span></p>
+        <p>Next Update: <span id="next-update">-</span></p>
+      </div>
+      <div class="gas-prices">
+        <div class="price-box">
+          <p>Low</p>
+          <span id="low-price">-</span>
+        </div>
+        <div class="price-box">
+          <p>Average</p>
+          <span id="avg-price">-</span>
+        </div>
+        <div class="price-box">
+          <p>High</p>
+          <span id="high-price">-</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <a href="https://scrollscan.com" target="_blank">View in ScrollScan</a>
+      <a href="https://scrollscan.com/address/0x444113187164527ec0Fc6C541f6A248aCdCe9dD8" target="_blank">Donate</a>
     </div>
   </div>
-  <div class="footer">
-    <a href="#" id="learn-more">Learn about Scroll L2 Gas Prices</a>
+  <div id="settings" class="hidden">
+    <h2>Settings</h2>
+    <label>
+      <input type="checkbox" id="alertsEnabled"> Enable Gas Price Alerts
+    </label>
+    <div id="alertSettings" class="hidden">
+      <input type="number" id="alertThreshold" min="0" step="0.1">
+      <select id="alertCondition">
+        <option value="above">Above</option>
+        <option value="below">Below</option>
+      </select>
+    </div>
+    <button id="closeSettings">Close</button>
   </div>
   <script src="popup.js"></script>
 </body>
