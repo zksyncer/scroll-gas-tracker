@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Gas Price Fetcher",
-  "description": "Fetches gas prices and stores them in local storage.",
+  "name": "Scroll Gas Price Fetcher",
+  "description": "Fetches the latest gas prices from Scroll network and stores them in local storage.",
   "version": "1.0",
   "action": {
     "default_popup": "popup.html"
@@ -11,10 +11,10 @@
   },
   "permissions": [
     "alarms",
-    "storage",
-    "notifications"
+    "storage"
   ],
   "host_permissions": [
-    "https://alpha-rpc.scroll.io/*"
+    "https://rpc.scroll.io/*"
   ]
 }
+
