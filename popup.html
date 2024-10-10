@@ -5,53 +5,50 @@
 </head>
 <body>
   <div class="container">
-    <div class="header">
+    <header>
       <h1>Scroll Gas Tracker</h1>
-      <button id="toggleTheme">🌓</button>
-      <button id="settingsBtn">⚙️</button>
-    </div>
+      <div class="buttons">
+        <button id="toggleTheme">🌓</button>
+        <button id="settingsBtn">⚙️</button>
+      </div>
+    </header>
     <div class="main-content">
       <div class="box">
-        <p>Base Fee</p>
+        <h2>Base Fee</h2>
         <span id="base-fee">0.0000</span>
       </div>
       <div class="info">
-        <p>Block Number: <span id="block-number">-</span></p>
+        <p>Block Number: <span id="block-number">Latest</span></p>
         <p>Next Update: <span id="next-update">-</span></p>
       </div>
       <div class="gas-prices">
         <div class="price-box">
-          <p>Low</p>
-          <span id="low-price">-</span>
+          <h3>Standard</h3>
+          <span id="standard-price">-</span>
+          <p>(30-60 secs)</p>
         </div>
         <div class="price-box">
-          <p>Average</p>
-          <span id="avg-price">-</span>
+          <h3>Fast</h3>
+          <span id="fast-price">-</span>
+          <p>(10-30 secs)</p>
         </div>
         <div class="price-box">
-          <p>High</p>
-          <span id="high-price">-</span>
+          <h3>Rapid</h3>
+          <span id="rapid-price">-</span>
+          <p>(5-10 secs)</p>
         </div>
+      </div>
+      <div class="pool-info">
+        <h3>Pending Transaction Pool Info:</h3>
+        <p>Pending Queue: <span id="pending-txs">-</span></p>
+        <p>Average Block Size: <span id="avg-block-size">-</span></p>
+        <p>Average Utilization: <span id="utilization">-</span></p>
       </div>
     </div>
     <div class="footer">
-      <a href="https://scrollscan.com" target="_blank">View in ScrollScan</a>
+      <a href="https://scrollscan.com/gastracker" target="_blank">View in ScrollScan</a>
       <a href="https://scrollscan.com/address/0x444113187164527ec0Fc6C541f6A248aCdCe9dD8" target="_blank">Donate</a>
     </div>
-  </div>
-  <div id="settings" class="hidden">
-    <h2>Settings</h2>
-    <label>
-      <input type="checkbox" id="alertsEnabled"> Enable Gas Price Alerts
-    </label>
-    <div id="alertSettings" class="hidden">
-      <input type="number" id="alertThreshold" min="0" step="0.1">
-      <select id="alertCondition">
-        <option value="above">Above</option>
-        <option value="below">Below</option>
-      </select>
-    </div>
-    <button id="closeSettings">Close</button>
   </div>
   <script src="popup.js"></script>
 </body>
