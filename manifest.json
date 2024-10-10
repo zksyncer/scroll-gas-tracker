@@ -1,12 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Scroll Gas Price Tracker",
-  "version": "1.0",
-  "description": "Tracks Scroll L2 gas prices in real time",
+  "version": "2.0",
+  "description": "Tracks Scroll L2 gas prices in real time with advanced features",
   "permissions": [
     "storage",
     "alarms",
-    "declarativeNetRequest"
+    "notifications"
   ],
   "host_permissions": [
     "https://rpc.scroll.io/"
@@ -26,12 +26,5 @@
   },
   "background": {
     "service_worker": "background.js"
-  },
-  "declarative_net_request": {
-    "rule_resources": [{
-      "id": "ruleset_1",
-      "enabled": true,
-      "path": "rules.json"
-    }]
   }
 }
