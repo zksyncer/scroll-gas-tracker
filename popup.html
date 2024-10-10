@@ -1,42 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <link rel="stylesheet" type="text/css" href="popup.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Gas Price Tracker</title>
+    <style>
+        body {
+            width: 200px;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        #icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 10px;
+        }
+        #gas-price {
+            font-size: 10.5px;
+            background-color: black;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        h1 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        #learn-more {
+            font-size: 12px;
+            margin-top: 10px;
+            display: block;
+            color: #0066cc;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="box base-fee">
-      <p>Base Fee</p>
-      <span id="base-fee">0.0000</span>
-    </div>
-  </div>
-  <div class="footer">
-    <p><a href="#" id="learn-more">Learn about Scroll L2 Gas Prices</a></p>
-  </div>
-  <div id="info-page" class="hidden">
-    <h2>Scroll's Bernoulli Upgrade</h2>
-    <p>Scheduled for April 29th, 2024, the Bernoulli upgrade aims to reduce transaction costs by 10x (depending on L1 gas prices). It introduces EIP-4844 data blobs for L1 data availability and the SHA2-256 precompile.</p>
-
-    <h3>Key Features:</h3>
-    <ul>
-      <li>EIP-4844 support: Utilizes "blobs" for data transmission, reducing gas costs for data availability.</li>
-      <li>SHA2-256 precompiled contract support: Enables more efficient cryptographic processing.</li>
-    </ul>
-
-    <h3>Technical Details:</h3>
-    <p>The upgrade includes changes to contracts, nodes, and ZKEVM circuits. Contracts will now accept batches with either calldata or blob encoding. Nodes (l2geth) will be updated to v5.3.0, and ZKEVM circuits to v0.10.3.</p>
-
-    <h3>Timeline:</h3>
-    <ul>
-      <li>April 15th, 2024: Contract upgrade proposal initiated</li>
-      <li>April 22nd, 2024: New l2geth version release</li>
-      <li>April 29th, 2024: Contract upgrade execution on Scroll Mainnet</li>
-    </ul>
-
-    <p>For more detailed information, please read <a href="https://scroll.io/blog/blobs-are-here" target="_blank">Blobs are Here: Scroll's Bernoulli Upgrade</a>.</p>
-    <p>Follow the developer <a href="https://x.com/j0hn1x" target="_blank">@j0hn1x on X</a> for updates.</p>
-    <button id="back-button">Back</button>
-  </div>
-  <script src="popup.js"></script>
+    <h1>Scroll Gas Price Tracker</h1>
+    <img id="icon" src="ICON48.PNG" alt="Scroll Gas Price Tracker">
+    <div id="gas-price">Loading...</div>
+    <a href="#" id="learn-more">Learn about Scroll L2 Gas Prices</a>
+    <script src="popup.js"></script>
 </body>
 </html>
