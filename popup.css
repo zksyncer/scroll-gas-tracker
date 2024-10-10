@@ -3,71 +3,94 @@ body {
   margin: 0;
   padding: 10px;
   font-family: Arial, sans-serif;
-  background-color: #F8E5D8;
-  color: #333;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+  background-color: #333;
+  color: #fff;
 }
 
 .container {
   text-align: center;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.main-content {
+  margin-bottom: 10px;
+}
+
 .box {
-  background-color: #E8C79E;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
-.box p {
-  font-size: 16px;
-  margin: 0;
-  font-weight: bold;
+.dark-mode .box {
+  background-color: #555;
 }
 
-.box span {
-  display: block;
-  font-size: 36px;
-  margin-top: 10px;
-  color: #333;
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
+
+.gas-prices {
+  display: flex;
+  justify-content: space-between;
+}
+
+.price-box {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 0 5px;
+}
+
+.price-box:nth-child(1) { background-color: #e6ffe6; }
+.price-box:nth-child(2) { background-color: #e6e6ff; }
+.price-box:nth-child(3) { background-color: #ffe6e6; }
+
+.dark-mode .price-box:nth-child(1) { background-color: #003300; }
+.dark-mode .price-box:nth-child(2) { background-color: #000033; }
+.dark-mode .price-box:nth-child(3) { background-color: #330000; }
 
 .footer {
-  margin-top: 10px;
-  text-align: center;
-  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .footer a {
-  color: #333;
-  text-decoration: underline;
+  color: #0066cc;
+  text-decoration: none;
 }
 
-#info-page {
-  background-color: white;
-  color: #333;
-  padding: 20px;
+.dark-mode .footer a {
+  color: #66b3ff;
+}
+
+#settings {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
 }
 
 .hidden {
-  display: none;
-}
-
-#back-button {
-  margin-top: 10px;
-  padding: 5px 10px;
-  background-color: #E8C79E;
-  color: #333;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-#back-button:hover {
-  background-color: #F8E5D8;
+  display: none !important;
 }
