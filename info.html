@@ -1,20 +1,35 @@
-<h2>Scroll's Bernoulli Upgrade</h2>
-<p>Scheduled for April 29th, 2024, the Bernoulli upgrade aims to reduce transaction costs by 10x (depending on L1 gas prices). It introduces EIP-4844 data blobs for L1 data availability and the SHA2-256 precompile.</p>
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="info.css">
+</head>
+<body>
+  <div class="info-container">
+    <h2>Scroll's Bernoulli Upgrade</h2>
+    <p>Scheduled for April 29th, 2024, the Bernoulli upgrade aims to reduce transaction costs by 10x (depending on L1 gas prices). It introduces EIP-4844 data blobs for L1 data availability and the SHA2-256 precompile.</p>
+    
+    <h3>Key Features:</h3>
+    <ul>
+      <li>EIP-4844 support: Utilizes "blobs" for data transmission, reducing gas costs for data availability.</li>
+      <li>SHA2-256 precompiled contract support: Enables more efficient cryptographic processing.</li>
+    </ul>
 
-<h3>Key Features:</h3>
-<ul>
-  <li>EIP-4844 support: Utilizes "blobs" for data transmission, reducing gas costs for data availability.</li>
-  <li>SHA2-256 precompiled contract support: Enables more efficient cryptographic processing.</li>
-</ul>
+    <h3>Technical Details:</h3>
+    <p>The upgrade includes changes to contracts, nodes, and ZKEVM circuits. Contracts will now accept batches with either calldata or blob encoding. Nodes (l2geth) will be updated to v5.3.0, and ZKEVM circuits to v0.10.3.</p>
 
-<h3>Technical Details:</h3>
-<p>The upgrade includes changes to contracts, nodes, and ZKEVM circuits. Contracts will now accept batches with either calldata or blob encoding. Nodes (l2geth) will be updated to v5.3.0, and ZKEVM circuits to v0.10.3.</p>
+    <h3>Timeline:</h3>
+    <ul>
+      <li>April 15th, 2024: Contract upgrade proposal initiated</li>
+      <li>April 22nd, 2024: New l2geth version release</li>
+      <li>April 29th, 2024: Contract upgrade execution on Scroll Mainnet</li>
+    </ul>
 
-<h3>Timeline:</h3>
-<ul>
-  <li>April 15th, 2024: Contract upgrade proposal initiated</li>
-  <li>April 22nd, 2024: New l2geth version release</li>
-  <li>April 29th, 2024: Contract upgrade execution on Scroll Mainnet</li>
-</ul>
+    <p>For more detailed information, please read <a href="https://scroll.io/blog/blobs-are-here" target="_blank">Blobs are Here: Scroll's Bernoulli Upgrade</a>.</p>
 
-<p>For more detailed information, please visit the official Scroll documentation.</p>
+    <p>Follow the developer <a href="https://x.com/j0hn1x" target="_blank">@j0hn1x on X</a> for updates.</p>
+
+    <button id="close-button">Close</button>
+  </div>
+  <script src="info.js"></script>
+</body>
+</html>
