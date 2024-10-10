@@ -1,7 +1,6 @@
 {
   "manifest_version": 3,
   "name": "Scroll Gas Price Tracker",
-  "version": "1.0",
   "description": "Track gas prices on the Scroll network",
   "action": {
     "default_popup": "popup.html",
@@ -26,4 +25,6 @@
   "host_permissions": [
     "https://rpc.scroll.io/*"
   ]
+}
+
 }
