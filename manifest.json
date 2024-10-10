@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Scroll Gas Price Tracker",
-  "version": "",
+  "version": "1.0",
   "description": "Tracks Scroll L2 gas prices in real time",
   "permissions": [
     "storage",
