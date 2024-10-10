@@ -5,9 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const standardPriceElement = document.getElementById('standard-price');
   const fastPriceElement = document.getElementById('fast-price');
   const rapidPriceElement = document.getElementById('rapid-price');
-  const pendingTxsElement = document.getElementById('pending-txs');
-  const avgBlockSizeElement = document.getElementById('avg-block-size');
-  const utilizationElement = document.getElementById('utilization');
   const toggleThemeBtn = document.getElementById('toggleTheme');
   const settingsBtn = document.getElementById('settingsBtn');
 
@@ -17,9 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
     standardPriceElement.textContent = data.standard.toFixed(2) + ' Gwei';
     fastPriceElement.textContent = data.fast.toFixed(2) + ' Gwei';
     rapidPriceElement.textContent = data.rapid.toFixed(2) + ' Gwei';
-    pendingTxsElement.textContent = data.pendingTxs + ' Txns';
-    avgBlockSizeElement.textContent = data.avgBlockSize + ' Txns';
-    utilizationElement.textContent = data.utilization + '%';
     
     const nextUpdate = new Date(data.nextUpdate);
     nextUpdateElement.textContent = nextUpdate.toLocaleTimeString();
@@ -49,4 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
       updateUI(changes.gasPrices.newValue);
     }
   });
+
+  // Request an update when the popup is opened
+  chrome.runtime.sendMessage({action: 'fetchGasPrice'});
 });
