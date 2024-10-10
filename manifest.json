@@ -5,10 +5,8 @@
   "description": "Tracks Scroll L2 gas prices in real time",
   "permissions": [
     "storage",
-    "alarms"
-  ],
-  "host_permissions": [
-    "https://rpc.scroll.io/"
+    "alarms",
+    "webRequest"
   ],
   "icons": {
     "16": "icon16.png",
