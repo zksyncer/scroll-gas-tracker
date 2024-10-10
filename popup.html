@@ -1,25 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scroll Gas Tracker</title>
-  <link rel="stylesheet" href="popup.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Gas Tracker</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .gas-price {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid white;
+            border-radius: 5px;
+            font-size: 24px;
+        }
+        .base-fee {
+            background-color: #9b59b6; /* Purple */
+            color: white;
+        }
+        .recommended-fee {
+            background-color: #3498db; /* Blue */
+            color: white;
+        }
+        a {
+            color: white;
+            text-decoration: underline;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="box base-fee">
-      <p>Base Fee</p>
-      <span id="baseFee">0.0</span>
+    <div class="gas-price base-fee">
+        <span>Base Fee</span>
+        <span id="base-fee">Loading...</span>
     </div>
-    <div class="box recommended-fee">
-      <p>Recommended Base Fee</p>
-      <span id="recommendedFee">0.0</span>
+    <div class="gas-price recommended-fee">
+        <span>Recommended Base Fee</span>
+        <span id="recommended-fee">Loading...</span>
     </div>
-  </div>
-  <div class="footer">
-    <p>New changes: learn about <a href="https://eips.ethereum.org/EIPS/eip-1559" target="_blank">EIP-1559 & changes to this extension.</a></p>
-  </div>
-  <script src="popup.js"></script>
+    <a href="https://scrollscan.com" target="_blank">New changes: learn about EIP-1559 & the changes to this extension.</a>
+    <script src="popup.js"></script>
 </body>
 </html>
