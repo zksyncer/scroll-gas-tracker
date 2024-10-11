@@ -1,9 +1,8 @@
-const API_ENDPOINT = 'https://api.scrollscan.com/api';
-const API_KEY = 'E493GGR9DINXQHJ2CG8BTUARJASZ8P3VM8';
+const RPC_ENDPOINT = 'https://rpc.scroll.io';
 
 chrome.runtime.onInstalled.addListener(() => {
-  fetchGasPrices(); // Initial fetch on startup
-  chrome.alarms.create('updateGasPrices', { periodInMinutes: 0.25 }); // Every 15 seconds
+  fetchGasPrices();
+  chrome.alarms.create('updateGasPrices', { periodInMinutes: 0.05 }); // Every 3 seconds
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
@@ -14,21 +13,28 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 
 async function fetchGasPrices() {
   try {
-    const response = await fetch(`${API_ENDPOINT}?module=proxy&action=eth_gasPrice&apikey=${API_KEY}`);
-    
+    const response = await fetch(RPC_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        jsonrpc: '2.0',
+        method: 'eth_gasPrice',
+        params: [],
+        id: 1
+      }),
+    });
+
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
     const data = await response.json();
-    console.log('API Response:', data); // Log the entire response for debugging
+    console.log('API Response:', data);
 
-    if (data.status === '0' || (data.message && data.message !== 'OK')) {
-      throw new Error(`API Error: ${data.message || 'Unknown error'}`);
-    }
-
-    if (!data.result) {
-      throw new Error('API response missing result');
+    if (data.error) {
+      throw new Error(`API Error: ${data.error.message}`);
     }
 
     const gasPriceWei = parseInt(data.result, 16);
@@ -40,8 +46,8 @@ async function fetchGasPrices() {
 
     const gasPrices = {
       standard: gasPriceGwei,
-      fast: gasPriceGwei * 1.1,
-      rapid: gasPriceGwei * 1.2,
+      fast: gasPriceGwei * 1.25, // Adjusted multiplier
+      rapid: gasPriceGwei * 1.5, // Adjusted multiplier
       baseFee: gasPriceGwei
     };
 
@@ -52,11 +58,11 @@ async function fetchGasPrices() {
   } catch (error) {
     console.error('Error fetching gas prices:', error);
     // Fallback to a default gas price
-    const defaultGasPrice = 30; // 30 Gwei as a fallback
+    const defaultGasPrice = 0.1; // 0.1 Gwei as a fallback
     const gasPrices = {
       standard: defaultGasPrice,
-      fast: defaultGasPrice * 1.1,
-      rapid: defaultGasPrice * 1.2,
+      fast: defaultGasPrice * 1.25,
+      rapid: defaultGasPrice * 1.5,
       baseFee: defaultGasPrice
     };
     await chrome.storage.local.set({ gasPrices });
@@ -67,7 +73,7 @@ async function fetchGasPrices() {
 }
 
 function updateBadge(price) {
-  chrome.action.setBadgeText({ text: price.toFixed(0) });
+  chrome.action.setBadgeText({ text: price.toFixed(2) });
   chrome.action.setBadgeBackgroundColor({ color: '#4688F1' });
 }
 
