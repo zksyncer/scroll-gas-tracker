@@ -1,33 +1,43 @@
+const API_ENDPOINT = 'https://api.scrollscan.com/api';
+const API_KEY = 'E493GGR9DINXQHJ2CG8BTUARJASZ8P3VM8';
+
 chrome.runtime.onInstalled.addListener(() => {
   fetchGasPrices(); // Initial fetch on startup
-  setInterval(fetchGasPrices, 60000); // Fetch every 60 seconds for real-time updates
+  chrome.alarms.create('updateGasPrices', { periodInMinutes: 0.25 }); // Every 15 seconds
+});
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === 'updateGasPrices') {
+    fetchGasPrices();
+  }
 });
 
 async function fetchGasPrices() {
   try {
-    const response = await fetch('http://localhost:3000/gasprices');
+    const response = await fetch(`${API_ENDPOINT}?module=proxy&action=eth_gasPrice&apikey=${API_KEY}`);
     
-    // Check if the response is ok (status in the range 200-299)
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const text = await response.text();
+    const data = await response.json();
 
-    // Extract gas prices using regex
-    const standardPrice = extractPrice(text, "Standard");
-    const fastPrice = extractPrice(text, "Fast");
-    const rapidPrice = extractPrice(text, "Rapid");
+    if (data.status !== '1' && data.message !== 'OK') {
+      throw new Error('API returned an error');
+    }
+
+    const gasPriceWei = parseInt(data.result, 16);
+    const gasPriceGwei = gasPriceWei / 1e9;
 
     const gasPrices = {
-      standard: standardPrice,
-      fast: fastPrice,
-      rapid: rapidPrice,
-      baseFee: standardPrice // Use standard price as base fee
+      standard: gasPriceGwei,
+      fast: gasPriceGwei * 1.1,
+      rapid: gasPriceGwei * 1.2,
+      baseFee: gasPriceGwei
     };
 
     await chrome.storage.local.set({ gasPrices });
-    updateBadge(gasPrices.baseFee); // Update the badge with the base fee
+    updateBadge(gasPrices.baseFee);
 
     console.log('Gas prices updated:', gasPrices);
   } catch (error) {
@@ -37,19 +47,11 @@ async function fetchGasPrices() {
   }
 }
 
-// Function to extract price from the HTML text
-function extractPrice(html, label) {
-  const regex = new RegExp(`${label}\\s*<span.*?>(.*?)</span>`, 'i');
-  const match = html.match(regex);
-  return match ? parseFloat(match[1]) || 0 : 0; // Default to 0 if not found
-}
-
 function updateBadge(price) {
-  chrome.action.setBadgeText({ text: price.toFixed(2) });
+  chrome.action.setBadgeText({ text: price.toFixed(0) });
   chrome.action.setBadgeBackgroundColor({ color: '#4688F1' });
 }
 
-// Request an update when the popup is opened
 chrome.runtime.onMessage.addListener((request) => {
   if (request.action === 'fetchGasPrice') {
     fetchGasPrices();
