@@ -4,8 +4,8 @@
   "version": "2.0",
   "description": "Tracks Scroll L2 gas prices in real time",
   "permissions": [
-    "storage",
-    "alarms"
+    "storage", 
+    "alarms" 
   ],
   "background": {
     "service_worker": "background.js"
