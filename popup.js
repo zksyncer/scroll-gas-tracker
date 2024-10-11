@@ -7,34 +7,45 @@ document.addEventListener('DOMContentLoaded', function() {
   const rapidPriceElement = document.getElementById('rapid-price');
   const toggleThemeBtn = document.getElementById('toggleTheme');
   const settingsBtn = document.getElementById('settingsBtn');
+  
+  let updateTimeout;
 
   function updateUI(data) {
-    baseFeeElement.textContent = data.baseFee.toFixed(4) + ' Gwei';
-    blockNumberElement.textContent = data.blockNumber;
-    document.getElementById('block-number-info').textContent = data.blockNumber;
-    document.getElementById('base-fee-info').textContent = data.baseFee.toFixed(4) + ' Gwei';
-    standardPriceElement.textContent = data.standard.toFixed(2) + ' Gwei';
-    fastPriceElement.textContent = data.fast.toFixed(2) + ' Gwei';
-    rapidPriceElement.textContent = data.rapid.toFixed(2) + ' Gwei';
+    if (updateTimeout) clearTimeout(updateTimeout);  // debounce
     
-    const lastUpdated = new Date();
-    document.getElementById('last-updated').textContent = lastUpdated.toLocaleTimeString();
+    updateTimeout = setTimeout(() => {
+      baseFeeElement.textContent = data.baseFee.toFixed(4) + ' Gwei';
+      blockNumberElement.textContent = data.blockNumber;
+      document.getElementById('block-number-info').textContent = data.blockNumber;
+      document.getElementById('base-fee-info').textContent = data.baseFee.toFixed(4) + ' Gwei';
+      standardPriceElement.textContent = data.standard.toFixed(2) + ' Gwei';
+      fastPriceElement.textContent = data.fast.toFixed(2) + ' Gwei';
+      rapidPriceElement.textContent = data.rapid.toFixed(2) + ' Gwei';
+
+      const lastUpdated = new Date();
+      document.getElementById('last-updated').textContent = lastUpdated.toLocaleTimeString();
     
-    const nextUpdate = new Date(data.nextUpdate);
-    nextUpdateElement.textContent = nextUpdate.toLocaleTimeString();
+      const nextUpdate = new Date(data.nextUpdate);
+      nextUpdateElement.textContent = nextUpdate.toLocaleTimeString();
+    }, 100);  // Debounce for smoother UI updates
   }
 
   function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    chrome.storage.local.set({darkMode: document.body.classList.contains('dark-mode')});
+    const isDarkMode = document.body.classList.toggle('dark-mode');
+    chrome.storage.local.set({ darkMode: isDarkMode }, () => {
+      console.log('Dark mode toggled: ', isDarkMode);
+    });
   }
 
   toggleThemeBtn.addEventListener('click', toggleTheme);
   settingsBtn.addEventListener('click', () => {
-    chrome.tabs.create({url: 'info.html'});
+    chrome.tabs.create({ url: 'info.html' });
   });
 
   chrome.storage.local.get(['gasPrices', 'darkMode'], function(result) {
+    if (chrome.runtime.lastError) {
+      console.error('Error retrieving storage: ', chrome.runtime.lastError);
+    }
     if (result.gasPrices) {
       updateUI(result.gasPrices);
     }
@@ -50,5 +61,9 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Request an update when the popup is opened
-  chrome.runtime.sendMessage({action: 'fetchGasPrice'});
+  chrome.runtime.sendMessage({ action: 'fetchGasPrice' }, (response) => {
+    if (chrome.runtime.lastError) {
+      console.error('Error sending fetchGasPrice message:', chrome.runtime.lastError);
+    }
+  });
 });
