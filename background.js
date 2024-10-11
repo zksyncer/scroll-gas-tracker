@@ -1,102 +1,50 @@
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.alarms.create('fetchGasPrice', { periodInMinutes: 5 }); // 5 min interval
+  fetchGasPrices(); // Initial fetch on startup
+  setInterval(fetchGasPrices, 60000); // Fetch every 60 seconds for real-time updates
 });
 
-chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === 'fetchGasPrice') {
-    fetchGasPrice();
+async function fetchGasPrices() {
+  try {
+    const response = await fetch('https://scrollscan.com/gastracker');
+    const text = await response.text();
+
+    // Parse the response text to extract the gas prices
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
+
+    // Extract gas prices; adjust these selectors as necessary
+    const standardPrice = parseFloat(doc.querySelector('h3:contains("Standard") + span').textContent);
+    const fastPrice = parseFloat(doc.querySelector('h3:contains("Fast") + span').textContent);
+    const rapidPrice = parseFloat(doc.querySelector('h3:contains("Rapid") + span').textContent);
+
+    // Update your storage or UI with the gas prices
+    const gasPrices = {
+      standard: standardPrice,
+      fast: fastPrice,
+      rapid: rapidPrice,
+      baseFee: standardPrice // Use standard price as base fee
+    };
+
+    // Save the prices to local storage
+    await chrome.storage.local.set({ gasPrices });
+    updateBadge(gasPrices.baseFee); // Update the badge with the base fee
+
+    console.log('Gas prices updated:', gasPrices);
+  } catch (error) {
+    console.error('Error fetching gas prices:', error);
+    chrome.action.setBadgeText({ text: 'ERR' });
+    chrome.action.setBadgeBackgroundColor({ color: '#FF0000' });
   }
-});
+}
 
 function updateBadge(price) {
   chrome.action.setBadgeText({ text: price.toFixed(2) });
   chrome.action.setBadgeBackgroundColor({ color: '#4688F1' });
 }
 
-async function fetchGasPrice() {
-  try {
-    const response = await fetch('https://rpc.scroll.io', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        method: 'eth_gasPrice',
-        params: [],
-        id: 1
-      }),
-    });
-
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error(`RPC error: ${data.error.message}`);
-    }
-
-    const baseFeeWei = BigInt(data.result);
-    const baseFeeGwei = Number(baseFeeWei) / 1e9; // Convert wei to Gwei
-
-    // Estimate other gas price tiers
-    const gasPrices = {
-      baseFee: baseFeeGwei,
-      standard: baseFeeGwei * 1.1,
-      fast: baseFeeGwei * 1.2,
-      rapid: baseFeeGwei * 1.3,
-      blockNumber: 'Latest', // Will be updated after fetching block number
-      nextUpdate: Date.now() + 300000 // 5 minutes from now
-    };
-
-    await chrome.storage.local.set({ gasPrices });
-    updateBadge(gasPrices.baseFee);
-
-    // Fetch the latest block number
-    fetchLatestBlockNumber();
-  } catch (error) {
-    console.error('Error fetching gas price:', error);
-    chrome.action.setBadgeText({ text: 'ERR' });
-    chrome.action.setBadgeBackgroundColor({ color: '#FF0000' });
-  }
-}
-
-async function fetchLatestBlockNumber() {
-  try {
-    const response = await fetch('https://rpc.scroll.io', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        method: 'eth_blockNumber',
-        params: [],
-        id: 1
-      }),
-    });
-
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error(`RPC error: ${data.error.message}`);
-    }
-
-    const blockNumber = parseInt(data.result, 16); // Convert hex to decimal
-
-    const { gasPrices } = await chrome.storage.local.get('gasPrices');
-    if (gasPrices) {
-      gasPrices.blockNumber = blockNumber;
-      await chrome.storage.local.set({ gasPrices });
-    }
-  } catch (error) {
-    console.error('Error fetching latest block number:', error);
-  }
-}
-
-// Initial fetch on startup
-fetchGasPrice();
-
+// Request an update when the popup is opened
 chrome.runtime.onMessage.addListener((request) => {
   if (request.action === 'fetchGasPrice') {
-    fetchGasPrice();
+    fetchGasPrices();
   }
 });
