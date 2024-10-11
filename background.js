@@ -21,12 +21,21 @@ async function fetchGasPrices() {
     }
 
     const data = await response.json();
+    console.log('API Response:', data); // Log the entire response for debugging
 
-    if (data.status !== '1' && data.message !== 'OK') {
-      throw new Error('API returned an error');
+    if (data.status === '0' || (data.message && data.message !== 'OK')) {
+      throw new Error(`API Error: ${data.message || 'Unknown error'}`);
+    }
+
+    if (!data.result) {
+      throw new Error('API response missing result');
     }
 
     const gasPriceWei = parseInt(data.result, 16);
+    if (isNaN(gasPriceWei)) {
+      throw new Error('Invalid gas price format');
+    }
+
     const gasPriceGwei = gasPriceWei / 1e9;
 
     const gasPrices = {
@@ -42,6 +51,16 @@ async function fetchGasPrices() {
     console.log('Gas prices updated:', gasPrices);
   } catch (error) {
     console.error('Error fetching gas prices:', error);
+    // Fallback to a default gas price
+    const defaultGasPrice = 30; // 30 Gwei as a fallback
+    const gasPrices = {
+      standard: defaultGasPrice,
+      fast: defaultGasPrice * 1.1,
+      rapid: defaultGasPrice * 1.2,
+      baseFee: defaultGasPrice
+    };
+    await chrome.storage.local.set({ gasPrices });
+    updateBadge(defaultGasPrice);
     chrome.action.setBadgeText({ text: 'ERR' });
     chrome.action.setBadgeBackgroundColor({ color: '#FF0000' });
   }
