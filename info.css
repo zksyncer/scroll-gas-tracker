@@ -12,7 +12,12 @@ body {
   background-color: #ffffff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.info-container:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 h2, h3 {
@@ -30,6 +35,7 @@ a {
 
 a:hover {
   text-decoration: underline;
+  color: #2980b9; /* Change color on hover for better visibility */
 }
 
 #close-button {
@@ -40,8 +46,10 @@ a:hover {
   border-radius: 5px;
   cursor: pointer;
   margin-top: 20px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 #close-button:hover {
   background-color: #2980b9;
+  transform: scale(1.05); /* Slightly scale button on hover */
 }
