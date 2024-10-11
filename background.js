@@ -10,16 +10,22 @@ async function fetchGasPrices() {
     const targetUrl = 'https://scrollscan.com/gastracker';
     
     const response = await fetch(proxyUrl + targetUrl);
+    
+    // Check if the response is ok (status in the range 200-299)
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
     const text = await response.text();
 
     // Parse the response text to extract the gas prices
     const parser = new DOMParser();
     const doc = parser.parseFromString(text, 'text/html');
 
-    // Extract gas prices; adjust these selectors as necessary
-    const standardPrice = parseFloat(doc.querySelector('h3:contains("Standard") + span').textContent);
-    const fastPrice = parseFloat(doc.querySelector('h3:contains("Fast") + span').textContent);
-    const rapidPrice = parseFloat(doc.querySelector('h3:contains("Rapid") + span').textContent);
+    // Adjust these selectors based on the actual HTML structure of Scrollscan
+    const standardPrice = parseFloat(doc.querySelector('h3:contains("Standard") + span').textContent) || 0;
+    const fastPrice = parseFloat(doc.querySelector('h3:contains("Fast") + span').textContent) || 0;
+    const rapidPrice = parseFloat(doc.querySelector('h3:contains("Rapid") + span').textContent) || 0;
 
     // Update your storage or UI with the gas prices
     const gasPrices = {
