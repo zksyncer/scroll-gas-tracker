@@ -24,9 +24,13 @@ async function fetchGasPrices() {
     }
 
     const data = await response.json();
-    console.log('API Response:', data);
+    console.log('Full API Response:', JSON.stringify(data, null, 2));
 
-    if (data.status !== '1' || data.message !== 'OK') {
+    if (typeof data !== 'object' || data === null) {
+      throw new Error(`Unexpected API response format: ${typeof data}`);
+    }
+
+    if (data.status === '0' || (data.message && data.message !== 'OK')) {
       throw new Error(`API Error: ${data.message || 'Unknown error'}`);
     }
 
@@ -36,7 +40,7 @@ async function fetchGasPrices() {
 
     const gasPriceWei = parseInt(data.result, 16);
     if (isNaN(gasPriceWei)) {
-      throw new Error('Invalid gas price format');
+      throw new Error(`Invalid gas price format: ${data.result}`);
     }
 
     const gasPriceGwei = gasPriceWei / 1e9;
@@ -54,7 +58,21 @@ async function fetchGasPrices() {
     console.log('Gas prices updated:', gasPrices);
   } catch (error) {
     console.error('Error fetching gas prices:', error);
-    // Fallback to a default gas price
+    console.error('Error details:', error.message);
+    
+    // Attempt to retrieve last known good prices
+    try {
+      const { gasPrices: lastGoodPrices } = await chrome.storage.local.get('gasPrices');
+      if (lastGoodPrices) {
+        console.log('Using last known good prices:', lastGoodPrices);
+        updateBadge(lastGoodPrices.baseFee);
+        return;
+      }
+    } catch (storageError) {
+      console.error('Error retrieving last known prices:', storageError);
+    }
+
+    // Fallback to a default gas price if no last known good prices
     const defaultGasPrice = 30; // 30 Gwei as a fallback
     const gasPrices = {
       standard: defaultGasPrice,
