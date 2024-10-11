@@ -26,14 +26,6 @@ async function fetchGasPrices() {
     const data = await response.json();
     console.log('Full API Response:', JSON.stringify(data, null, 2));
 
-    if (typeof data !== 'object' || data === null) {
-      throw new Error(`Unexpected API response format: ${typeof data}`);
-    }
-
-    if (data.status === '0' || (data.message && data.message !== 'OK')) {
-      throw new Error(`API Error: ${data.message || 'Unknown error'}`);
-    }
-
     if (!data.result) {
       throw new Error('API response missing result');
     }
@@ -45,17 +37,21 @@ async function fetchGasPrices() {
 
     const gasPriceGwei = gasPriceWei / 1e9;
 
+    // Estimate prices for different speeds
     const gasPrices = {
       standard: gasPriceGwei,
-      fast: gasPriceGwei * 1.1,
-      rapid: gasPriceGwei * 1.2,
+      fast: Math.max(gasPriceGwei, 0.11), // Ensure it's at least 0.11 Gwei
+      rapid: Math.max(gasPriceGwei * 5, 0.61), // Ensure it's at least 0.61 Gwei
       baseFee: gasPriceGwei
     };
 
     await chrome.storage.local.set({ gasPrices });
-    updateBadge(gasPrices.baseFee);
+    updateBadge(gasPrices.standard);
 
     console.log('Gas prices updated:', gasPrices);
+
+    // Estimate gas for a sample transaction
+    await estimateGas(gasPrices.standard);
   } catch (error) {
     console.error('Error fetching gas prices:', error);
     console.error('Error details:', error.message);
@@ -65,7 +61,7 @@ async function fetchGasPrices() {
       const { gasPrices: lastGoodPrices } = await chrome.storage.local.get('gasPrices');
       if (lastGoodPrices) {
         console.log('Using last known good prices:', lastGoodPrices);
-        updateBadge(lastGoodPrices.baseFee);
+        updateBadge(lastGoodPrices.standard);
         return;
       }
     } catch (storageError) {
@@ -73,17 +69,37 @@ async function fetchGasPrices() {
     }
 
     // Fallback to a default gas price if no last known good prices
-    const defaultGasPrice = 30; // 30 Gwei as a fallback
+    const defaultGasPrice = 0.11; // 0.11 Gwei as a fallback
     const gasPrices = {
       standard: defaultGasPrice,
-      fast: defaultGasPrice * 1.1,
-      rapid: defaultGasPrice * 1.2,
+      fast: defaultGasPrice,
+      rapid: defaultGasPrice * 5,
       baseFee: defaultGasPrice
     };
     await chrome.storage.local.set({ gasPrices });
     updateBadge(defaultGasPrice);
     chrome.action.setBadgeText({ text: 'ERR' });
     chrome.action.setBadgeBackgroundColor({ color: '#FF0000' });
+  }
+}
+
+async function estimateGas(gasPrice) {
+  try {
+    const response = await fetch(`${API_ENDPOINT}?module=proxy&action=eth_estimateGas&to=0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df&value=0xff22&gasPrice=${Math.floor(gasPrice * 1e9).toString(16)}&apikey=${API_KEY}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('Gas Estimate Response:', JSON.stringify(data, null, 2));
+
+    if (data.result) {
+      const estimatedGas = parseInt(data.result, 16);
+      console.log('Estimated gas:', estimatedGas);
+    }
+  } catch (error) {
+    console.error('Error estimating gas:', error);
   }
 }
 
