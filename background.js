@@ -8,9 +8,9 @@ async function fetchGasPrices() {
     // Using a CORS proxy
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
     const targetUrl = 'https://scrollscan.com/gastracker';
-    
+
     const response = await fetch(proxyUrl + targetUrl);
-    
+
     // Check if the response is ok (status in the range 200-299)
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -18,14 +18,10 @@ async function fetchGasPrices() {
 
     const text = await response.text();
 
-    // Parse the response text to extract the gas prices
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, 'text/html');
-
-    // Adjust these selectors based on the actual HTML structure of Scrollscan
-    const standardPrice = parseFloat(doc.querySelector('h3:contains("Standard") + span').textContent) || 0;
-    const fastPrice = parseFloat(doc.querySelector('h3:contains("Fast") + span').textContent) || 0;
-    const rapidPrice = parseFloat(doc.querySelector('h3:contains("Rapid") + span').textContent) || 0;
+    // Extract gas prices using regex
+    const standardPrice = extractPrice(text, "Standard");
+    const fastPrice = extractPrice(text, "Fast");
+    const rapidPrice = extractPrice(text, "Rapid");
 
     // Update your storage or UI with the gas prices
     const gasPrices = {
@@ -45,6 +41,13 @@ async function fetchGasPrices() {
     chrome.action.setBadgeText({ text: 'ERR' });
     chrome.action.setBadgeBackgroundColor({ color: '#FF0000' });
   }
+}
+
+// Function to extract price from the HTML text
+function extractPrice(html, label) {
+  const regex = new RegExp(`${label}\\s*<span.*?>(.*?)</span>`, 'i');
+  const match = html.match(regex);
+  return match ? parseFloat(match[1]) || 0 : 0; // Default to 0 if not found
 }
 
 function updateBadge(price) {
