@@ -10,9 +10,6 @@
     "https://api.scrollscan.com/",
     "https://rpc.scroll.io/"
   ],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self' https://cdnjs.cloudflare.com; object-src 'self'"
-  },
   "icons": {
     "16": "ICON16.PNG",
     "48": "ICON48.PNG",
