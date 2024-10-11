@@ -1,5 +1,4 @@
-importScripts('https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js');
-
+importScripts('ethers.min.js');
 const API_ENDPOINT = 'https://api.scrollscan.com/api';
 const API_KEY = 'E493GGR9DINXQHJ2CG8BTUARJASZ8P3VM8';
 const RPC_URL = 'https://rpc.scroll.io/';
