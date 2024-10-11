@@ -4,8 +4,8 @@
     "priority": 1,
     "action": { "type": "allow" },
     "condition": {
-      "urlFilter": "https://rpc.scroll.io/",
-      "resourceTypes": ["xmlhttprequest"]
+      "urlFilter": "||rpc.scroll.io/*",
+      "resourceTypes": ["xmlhttprequest", "script", "image"]
     }
   }
 ]
