@@ -5,72 +5,79 @@ body {
   font-family: Arial, sans-serif;
   background-color: #f0f0f0;
   color: #333;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 body.dark-mode {
-  background-color: #1c1c1c;
+  background-color: #333;
   color: #f0f0f0;
 }
 
 .container {
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  transition: background-color 0.3s ease;
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .buttons button {
   background: none;
   border: none;
-  font-size: 22px;
+  font-size: 20px;
   cursor: pointer;
   margin-left: 10px;
-  transition: transform 0.2s ease;
-}
-
-.buttons button:hover {
-  transform: scale(1.2);
 }
 
 .box {
   background-color: #f8f8f8;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
   text-align: center;
 }
 
-.info,
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
 .gas-prices {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .price-box {
   flex: 1;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 10px;
+  border-radius: 5px;
   text-align: center;
   margin: 0 5px;
-  transition: background-color 0.3s ease;
+  font-size: 14px; /* Reduced font size for compactness */
+}
+
+h3 {
+  display: flex;
+  align-items: center; /* Align items vertically */
+  justify-content: center; /* Center the content */
+  margin: 0; /* Remove default margin */
+  font-size: 16px; /* Smaller font size for headings */
 }
 
 .price-box:nth-child(1) { background-color: #e6ffe6; }
-.price-box:nth-child(2) { background-color: #fff4e6; }
+.price-box:nth-child(2) { background-color: #fff0e6; }
 .price-box:nth-child(3) { background-color: #ffe6e6; }
 
 .network-info {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .footer {
@@ -81,29 +88,24 @@ header {
 .footer a {
   color: #0066cc;
   text-decoration: none;
-  transition: color 0.2s ease;
 }
 
 .footer a:hover {
-  color: #004499;
+  text-decoration: underline;
 }
 
 .dark-mode .container {
-  background-color: #2c2c2c;
-}
-
-.dark-mode .box {
   background-color: #444;
 }
 
-.dark-mode .price-box:nth-child(1) { background-color: #2b4033; }
-.dark-mode .price-box:nth-child(2) { background-color: #4a3929; }
-.dark-mode .price-box:nth-child(3) { background-color: #402b2b; }
+.dark-mode .box {
+  background-color: #555;
+}
+
+.dark-mode .price-box:nth-child(1) { background-color: #1a331a; }
+.dark-mode .price-box:nth-child(2) { background-color: #33291a; }
+.dark-mode .price-box:nth-child(3) { background-color: #331a1a; }
 
 .dark-mode .footer a {
   color: #66b3ff;
-}
-
-.dark-mode .footer a:hover {
-  color: #3399ff;
 }
