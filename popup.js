@@ -17,28 +17,11 @@ document.addEventListener('DOMContentLoaded', function() {
     fastPriceElement.textContent = data.fast.toFixed(2) + ' Gwei';
     rapidPriceElement.textContent = data.rapid.toFixed(2) + ' Gwei';
     
-    updateEmoji('standard-emoji', data.standard);
-    updateEmoji('fast-emoji', data.fast);
-    updateEmoji('rapid-emoji', data.rapid);
-    
     const lastUpdated = new Date();
     document.getElementById('last-updated').textContent = lastUpdated.toLocaleTimeString();
     
     const nextUpdate = new Date(data.nextUpdate);
     nextUpdateElement.textContent = nextUpdate.toLocaleTimeString();
-  }
-
-  function updateEmoji(elementId, price) {
-    const element = document.getElementById(elementId);
-    if (price < 0.05) {
-      element.textContent = '😊';
-    } else if (price < 0.1) {
-      element.textContent = '😐';
-    } else if (price < 0.2) {
-      element.textContent = '😟';
-    } else {
-      element.textContent = '😠';
-    }
   }
 
   function toggleTheme() {
