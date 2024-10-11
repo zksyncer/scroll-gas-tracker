@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scroll Gas Tracker</title>
   <link rel="stylesheet" type="text/css" href="popup.css">
 </head>
 <body>
@@ -8,19 +11,22 @@
     <header>
       <h1>Scroll Gas Tracker</h1>
       <div class="buttons">
-        <button id="toggleTheme">🌓</button>
-        <button id="settingsBtn">⚙️</button>
+        <button id="toggleTheme" title="Toggle Dark/Light Mode">🌓</button>
+        <button id="settingsBtn" title="Settings">⚙️</button>
       </div>
     </header>
+
     <div class="main-content">
       <div class="box">
         <h2>Base Fee</h2>
         <span id="base-fee">0.0000 Gwei</span>
       </div>
+
       <div class="info">
         <p>Block Number: <span id="block-number">-</span></p>
         <p>Next Update: <span id="next-update">-</span></p>
       </div>
+
       <div class="gas-prices">
         <div class="price-box">
           <h3>Standard 🐢</h3>
@@ -38,6 +44,7 @@
           <p>(5-10 secs)</p>
         </div>
       </div>
+
       <div class="network-info">
         <h3>Network Info:</h3>
         <p>Latest Block: <span id="block-number-info">-</span></p>
@@ -45,11 +52,13 @@
         <p>Last Updated: <span id="last-updated">-</span></p>
       </div>
     </div>
+
     <div class="footer">
       <a href="https://scrollscan.com/gastracker" target="_blank">View in ScrollScan</a>
       <a href="https://scrollscan.com/address/0x444113187164527ec0Fc6C541f6A248aCdCe9dD8" target="_blank">Donate</a>
     </div>
   </div>
+
   <script src="popup.js"></script>
 </body>
 </html>
