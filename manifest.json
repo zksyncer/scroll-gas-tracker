@@ -4,11 +4,10 @@
   "version": "1.0",
   "description": "Tracks Scroll L2 gas prices in real time",
   "permissions": [
-    "storage",
-    "alarms"
+    "storage"
   ],
   "host_permissions": [
-    "https://rpc.scroll.io/"
+    "https://api.scrollscan.com/*"
   ],
   "icons": {
     "16": "ICON16.PNG",
