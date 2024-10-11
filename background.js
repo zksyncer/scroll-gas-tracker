@@ -5,7 +5,11 @@ chrome.runtime.onInstalled.addListener(() => {
 
 async function fetchGasPrices() {
   try {
-    const response = await fetch('https://scrollscan.com/gastracker');
+    // Using a CORS proxy
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const targetUrl = 'https://scrollscan.com/gastracker';
+    
+    const response = await fetch(proxyUrl + targetUrl);
     const text = await response.text();
 
     // Parse the response text to extract the gas prices
