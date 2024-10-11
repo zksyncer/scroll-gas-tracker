@@ -1,6 +1,6 @@
 const API_ENDPOINT = 'https://api.scrollscan.com/api';
 const API_KEY = 'E493GGR9DINXQHJ2CG8BTUARJASZ8P3VM8';
-const UPDATE_INTERVAL = 12000; // 12 seconds, to stay within rate limits
+const UPDATE_INTERVAL = 3000; // 3 seconds update interval
 
 let lastUpdateTime = 0;
 
@@ -35,12 +35,12 @@ async function fetchGasPrices() {
       throw new Error(`Invalid gas price format: ${data.result}`);
     }
 
-    const gasPriceGwei = gasPriceWei / 1e9;
+    const gasPriceGwei = gasPriceWei / 1e9; // Convert Wei to Gwei
 
     // Estimate prices for different speeds
     const gasPrices = {
       standard: gasPriceGwei,
-      fast: Math.max(gasPriceGwei, 0.11), // Ensure it's at least 0.11 Gwei
+      fast: Math.max(gasPriceGwei * 2, 0.11), // Ensure it's at least 0.11 Gwei
       rapid: Math.max(gasPriceGwei * 5, 0.61), // Ensure it's at least 0.61 Gwei
       baseFee: gasPriceGwei
     };
