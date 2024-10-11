@@ -1,5 +1,5 @@
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.alarms.create('fetchGasPrice', { periodInMinutes: 1/60 });
+  chrome.alarms.create('fetchGasPrice', { periodInMinutes: 5 }); // 5 min interval
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
@@ -9,8 +9,8 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 });
 
 function updateBadge(price) {
-  chrome.action.setBadgeText({text: price.toFixed(2)});
-  chrome.action.setBadgeBackgroundColor({color: '#4688F1'});
+  chrome.action.setBadgeText({ text: price.toFixed(2) });
+  chrome.action.setBadgeBackgroundColor({ color: '#4688F1' });
 }
 
 async function fetchGasPrice() {
@@ -29,7 +29,7 @@ async function fetchGasPrice() {
     });
 
     const data = await response.json();
-    
+
     if (data.error) {
       throw new Error(`RPC error: ${data.error.message}`);
     }
@@ -37,29 +37,25 @@ async function fetchGasPrice() {
     const baseFeeWei = BigInt(data.result);
     const baseFeeGwei = Number(baseFeeWei) / 1e9; // Convert wei to Gwei
 
-    // Estimate other prices based on base fee
-    const standardGwei = baseFeeGwei * 1.1;
-    const fastGwei = baseFeeGwei * 1.2;
-    const rapidGwei = baseFeeGwei * 1.3;
-
+    // Estimate other gas price tiers
     const gasPrices = {
       baseFee: baseFeeGwei,
-      standard: standardGwei,
-      fast: fastGwei,
-      rapid: rapidGwei,
-      blockNumber: 'Latest', // We'll update this in fetchLatestBlockNumber
-      nextUpdate: Date.now() + 60000 // 1 minute from now
+      standard: baseFeeGwei * 1.1,
+      fast: baseFeeGwei * 1.2,
+      rapid: baseFeeGwei * 1.3,
+      blockNumber: 'Latest', // Will be updated after fetching block number
+      nextUpdate: Date.now() + 300000 // 5 minutes from now
     };
 
-    chrome.storage.local.set({ gasPrices: gasPrices });
+    await chrome.storage.local.set({ gasPrices });
     updateBadge(gasPrices.baseFee);
 
-    // Fetch the latest block number separately
+    // Fetch the latest block number
     fetchLatestBlockNumber();
   } catch (error) {
     console.error('Error fetching gas price:', error);
-    chrome.action.setBadgeText({text: 'ERR'});
-    chrome.action.setBadgeBackgroundColor({color: '#FF0000'});
+    chrome.action.setBadgeText({ text: 'ERR' });
+    chrome.action.setBadgeBackgroundColor({ color: '#FF0000' });
   }
 }
 
@@ -79,27 +75,27 @@ async function fetchLatestBlockNumber() {
     });
 
     const data = await response.json();
-    
+
     if (data.error) {
       throw new Error(`RPC error: ${data.error.message}`);
     }
 
-    const blockNumber = parseInt(data.result, 16);
-    chrome.storage.local.get('gasPrices', (result) => {
-      if (result.gasPrices) {
-        result.gasPrices.blockNumber = blockNumber;
-        chrome.storage.local.set({ gasPrices: result.gasPrices });
-      }
-    });
+    const blockNumber = parseInt(data.result, 16); // Convert hex to decimal
+
+    const { gasPrices } = await chrome.storage.local.get('gasPrices');
+    if (gasPrices) {
+      gasPrices.blockNumber = blockNumber;
+      await chrome.storage.local.set({ gasPrices });
+    }
   } catch (error) {
     console.error('Error fetching latest block number:', error);
   }
 }
 
-// Initial fetch
+// Initial fetch on startup
 fetchGasPrice();
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request) => {
   if (request.action === 'fetchGasPrice') {
     fetchGasPrice();
   }
